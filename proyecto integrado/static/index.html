@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calificaciones Tributarias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg-pagina: #fdf8f9;
+            --bg-superficie: #ffffff;
+            --bg-suave: #f9eef2;
+            --borde-suave: #efd9e2;
+            --texto-principal: #3b2632;
+            --texto-suave: #755868;
+            --acento: #b85d86;
+            --acento-hover: #9c476e;
+            --acento-oscuro: #5a2c44;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-pagina);
+            color: var(--texto-principal);
+        }
+
+        .navbar-custom, .header-custom {
+            background-color: var(--bg-superficie);
+            border-bottom: 1px solid var(--borde-suave);
+        }
+
+        .marca-titulo {
+            color: var(--acento-oscuro);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-link {
+            color: var(--texto-suave);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            transition: color 0.15s ease;
+        }
+
+        .topbar-link:hover {
+            color: var(--acento);
+        }
+
+        .card {
+            background-color: var(--bg-superficie);
+            border: 1px solid var(--borde-suave) !important;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(138, 72, 103, 0.06) !important;
+        }
+
+        .form-control, .form-select {
+            border-color: var(--borde-suave);
+            border-radius: 10px;
+            color: var(--texto-principal);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--acento);
+            box-shadow: 0 0 0 0.2rem rgba(184, 93, 134, 0.16);
+        }
+
+        .btn-acento {
+            background-color: var(--acento);
+            border-color: var(--acento);
+            color: #ffffff;
+            border-radius: 10px;
+        }
+
+        .btn-acento:hover, .btn-acento:focus {
+            background-color: var(--acento-hover);
+            border-color: var(--acento-hover);
+            color: #ffffff;
+        }
+
+        .btn-outline-acento {
+            border-color: var(--acento);
+            color: var(--acento);
+            border-radius: 10px;
+            background-color: transparent;
+        }
+
+        .btn-outline-acento:hover {
+            background-color: var(--bg-suave);
+            color: var(--acento-oscuro);
+            border-color: var(--acento);
+        }
+
+        .lista-funciones li {
+            background-color: var(--bg-superficie);
+            border: 1px solid var(--borde-suave);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 0.65rem;
+            color: var(--texto-suave);
+        }
+
+        .lista-funciones li strong {
+            color: var(--acento-oscuro);
+        }
+
+        .nav-tabs {
+            border-bottom: 1px solid var(--borde-suave);
+            gap: 0.35rem;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--texto-suave);
+            border: 1px solid transparent;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--acento);
+            border-color: transparent;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--acento-oscuro);
+            background-color: var(--bg-superficie);
+            border-color: var(--borde-suave) var(--borde-suave) var(--bg-superficie);
+        }
+
+        .factor-input {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.88rem;
+        }
+
+        .alerta-regla {
+            background-color: var(--bg-suave);
+            border: 1px solid var(--borde-suave);
+            color: var(--acento-oscuro);
+            border-radius: 12px;
+        }
+
+        .badge-rol {
+            background-color: var(--bg-suave);
+            color: var(--acento-oscuro);
+            border: 1px solid var(--borde-suave);
+        }
+
+        .modal-content {
+            border: 1px solid var(--borde-suave);
+            border-radius: 16px;
+        }
+
+        .text-muted-suave {
+            color: var(--texto-suave) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PORTADA WEB CON BARRA SUPERIOR -->
+    <div id="login-section">
+        <header class="header-custom sticky-top">
+            <div class="container d-flex flex-wrap justify-content-between align-items-center py-3">
+                <a href="#" class="text-decoration-none marca-titulo fs-5">
+                    Calificaciones Tributarias
+                </a>
+                <nav class="d-flex align-items-center gap-2 gap-md-3">
+                    <a href="#acerca" class="topbar-link d-none d-sm-inline">Acerca del sistema</a>
+                    <a href="#funciones" class="topbar-link d-none d-sm-inline">Funciones</a>
+                    <button type="button" class="btn btn-sm btn-outline-acento fw-semibold px-3" onclick="irAFormularioAuth('login')">
+                        Iniciar sesión
+                    </button>
+                    <button type="button" class="btn btn-sm btn-acento fw-semibold px-3" onclick="irAFormularioAuth('registro')">
+                        Registrarse
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="container py-5">
+            <div class="row g-5 align-items-start">
+                <!-- Columna izquierda: Título, descripción y funciones -->
+                <div class="col-lg-7" id="acerca">
+                    <h1 class="fw-bold mb-3" style="color: var(--acento-oscuro); letter-spacing: -0.02em;">
+                        Gestión y control de calificaciones tributarias
+                    </h1>
+                    <p class="text-muted-suave fs-6 mb-3 lh-base">
+                        Esta aplicación web permite registrar, revisar y administrar calificaciones tributarias con sus 29 factores calculados a 8 decimales, conectada directamente a PostgreSQL.
+                    </p>
+                    <p class="text-muted-suave fs-6 mb-4 lh-base">
+                        El sistema exige fecha obligatoria en el período comercial, valida que la suma de los factores 8 al 16 no supere 1.00000000, permite cargar o exportar archivos CSV y separa los permisos entre clientes y administradores registrando cada movimiento en la bitácora.
+                    </p>
+
+                    <div id="funciones" class="pt-3">
+                        <h2 class="h6 fw-bold text-uppercase mb-3" style="color: var(--acento); letter-spacing: 0.05em;">
+                            Qué puedes hacer aquí
+                        </h2>
+                        <ul class="list-unstyled lista-funciones small mb-0">
+                            <li><strong>Ingresar calificaciones:</strong> Completa origen, mercado, fecha del período y los 29 factores con confirmación previa antes de guardar.</li>
+                            <li><strong>Filtrar y revisar detalle:</strong> Busca registros por mercado, abre el desglose de los 29 factores o descarga todo en CSV.</li>
+                            <li><strong>Carga masiva:</strong> Sube planillas CSV (usando coma o punto y coma) con validación fila por fila y plantilla descargable.</li>
+                            <li><strong>Control de acceso y auditoría:</strong> Distingue entre perfil cliente y administrador, encripta claves con SHA-256 y guarda registro de acciones.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Columna derecha: Iniciar sesión o Registrarse -->
+                <div class="col-lg-5" id="caja-acceso">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="d-flex gap-2 mb-4">
+                                <button type="button" class="btn btn-acento w-50 fw-semibold" id="btn-modo-login" onclick="cambiarModoAuth('login')">
+                                    Iniciar sesión
+                                </button>
+                                <button type="button" class="btn btn-outline-acento w-50 fw-semibold" id="btn-modo-registro" onclick="cambiarModoAuth('registro')">
+                                    Registrarse
+                                </button>
+                            </div>
+
+                            <div id="auth-error" class="alert alert-danger d-none py-2 small rounded-3"></div>
+                            <div id="auth-success" class="alert alert-success d-none py-2 small rounded-3"></div>
+
+                            <!-- FORMULARIO INICIAR SESIÓN -->
+                            <form id="login-form">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Usuario</label>
+                                    <input type="text" id="login-user" class="form-control" placeholder="admin o cliente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Contraseña</label>
+                                    <input type="password" id="login-pass" class="form-control" placeholder="Ingresa tu clave" required>
+                                </div>
+                                <button type="submit" class="btn btn-acento w-100 fw-semibold py-2">
+                                    Iniciar sesión
+                                </button>
+                                <p class="text-muted-suave small mt-3 mb-0 text-center">
+                                    Cuentas de prueba: <code>admin / 1234</code> y <code>cliente / 1234</code>
+                                </p>
+                            </form>
+
+                            <!-- FORMULARIO REGISTRARSE -->
+                            <form id="register-form" class="d-none">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Nombre de usuario</label>
+                                    <input type="text" id="reg-user" class="form-control" placeholder="Ej: camila_cliente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Contraseña</label>
+                                    <input type="password" id="reg-pass" class="form-control" placeholder="Mínimo 4 caracteres" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Rol</label>
+                                    <select id="reg-rol" class="form-select">
+                                        <option value="cliente">Cliente</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-acento w-100 fw-semibold py-2">
+                                    Crear cuenta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- APLICACIÓN PRINCIPAL -->
+    <div id="app-section" class="d-none">
+        <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+            <div class="container py-1">
+                <a class="navbar-brand marca-titulo" href="#">Calificaciones Tributarias</a>
+                <div class="d-flex align-items-center">
+                    <span class="me-3 small">
+                        <strong id="nav-usuario"></strong>
+                        <span id="nav-rol" class="badge badge-rol ms-1 text-uppercase"></span>
+                    </span>
+                    <button class="btn btn-outline-acento btn-sm fw-semibold" onclick="cerrarSesion()">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container pb-5">
+            <!-- Alertas globales -->
+            <div id="global-alert" class="alert d-none alert-dismissible fade show rounded-3" role="alert">
+                <span id="global-alert-msg"></span>
+                <button type="button" class="btn-close" onclick="ocultarAlerta()"></button>
+            </div>
+
+            <!-- Pestañas -->
+            <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active fw-semibold" id="form-tab" data-bs-toggle="tab" data-bs-target="#tab-formulario" type="button">
+                        Nueva calificación
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-semibold" id="list-tab" data-bs-toggle="tab" data-bs-target="#tab-registros" type="button" onclick="cargarRegistros()">
+                        Calificaciones registradas
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-semibold" id="csv-tab" data-bs-toggle="tab" data-bs-target="#tab-csv" type="button">
+                        Carga masiva CSV
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-semibold" id="seguridad-tab" data-bs-toggle="tab" data-bs-target="#tab-seguridad" type="button" onclick="cargarAuditoria()">
+                        Auditoría y seguridad
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- PESTAÑA 1: FORMULARIO -->
+                <div class="tab-pane fade show active" id="tab-formulario">
+                    <div class="card p-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <h5 class="fw-bold mb-0" id="form-titulo" style="color: var(--acento-oscuro);">Ingresar calificación tributaria</h5>
+                            <div>
+                                <button type="button" class="btn btn-outline-acento btn-sm me-2" onclick="rellenarDatosPrueba()">
+                                    Rellenar datos de prueba
+                                </button>
+                                <button type="button" id="btn-cancelar-edicion" class="btn btn-outline-danger btn-sm d-none" onclick="cancelarEdicion()">
+                                    Cancelar edición
+                                </button>
+                            </div>
+                        </div>
+
+                        <form id="calificacion-form" novalidate>
+                            <input type="hidden" id="edit-id" value="">
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold small">Origen <span class="text-danger">*</span></label>
+                                    <select id="origen" class="form-select" required>
+                                        <option value="Corredora de Bolsa">Corredora de Bolsa</option>
+                                        <option value="Sociedad Anónima">Sociedad Anónima</option>
+                                        <option value="Fondo Mutuo">Fondo Mutuo</option>
+                                        <option value="Emisor Extranjero">Emisor Extranjero</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold small">Mercado <span class="text-danger">*</span></label>
+                                    <select id="mercado" class="form-select" required>
+                                        <option value="Acciones">Acciones</option>
+                                        <option value="CFI">CFI</option>
+                                        <option value="Renta Fija">Renta Fija</option>
+                                        <option value="Derivados">Derivados</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold small">Período comercial (obligatorio) <span class="text-danger">*</span></label>
+                                    <input type="date" id="periodo_comercial" class="form-control" required>
+                                    <div class="invalid-feedback">Debes seleccionar una fecha antes de guardar.</div>
+                                </div>
+                            </div>
+
+                            <div class="alerta-regla d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 py-2 mb-3" id="box-suma-8-16">
+                                <span class="small"><strong>Regla:</strong> La suma de los factores 8 al 16 debe ser menor o igual a 1.00000000</span>
+                                <span class="badge btn-acento fs-6 font-monospace px-3 py-2" id="badge-suma-8-16">Suma (8-16): 0.00000000</span>
+                            </div>
+
+                            <h6 class="fw-bold text-muted-suave mb-3">29 factores (8 decimales)</h6>
+                            <div class="row g-2 mb-4" id="contenedor-factores"></div>
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-acento px-4 py-2 fw-semibold" id="btn-guardar">
+                                    Calcular y guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 2: REGISTROS GUARDADOS -->
+                <div class="tab-pane fade" id="tab-registros">
+                    <div class="card p-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <h5 class="fw-bold mb-0" style="color: var(--acento-oscuro);">Calificaciones registradas</h5>
+                            <div class="d-flex gap-2">
+                                <select id="filtro-mercado" class="form-select form-select-sm" style="width: 180px;" onchange="cargarRegistros()">
+                                    <option value="TODOS">Todos los mercados</option>
+                                    <option value="Acciones">Acciones</option>
+                                    <option value="CFI">CFI</option>
+                                    <option value="Renta Fija">Renta Fija</option>
+                                    <option value="Derivados">Derivados</option>
+                                </select>
+                                <a href="/api/calificaciones/exportar/csv" class="btn btn-acento btn-sm fw-semibold">
+                                    Exportar CSV
+                                </a>
+                                <button class="btn btn-outline-acento btn-sm" onclick="cargarRegistros()" title="Actualizar">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead style="background-color: var(--bg-suave);">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Origen</th>
+                                        <th>Mercado</th>
+                                        <th>Período comercial</th>
+                                        <th>Usuario</th>
+                                        <th>Fecha registro</th>
+                                        <th class="text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-calificaciones">
+                                    <tr><td colspan="7" class="text-center text-muted-suave py-4">Cargando registros...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 3: CARGA MASIVA CSV -->
+                <div class="tab-pane fade" id="tab-csv">
+                    <div class="card p-4">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <h5 class="fw-bold mb-0" style="color: var(--acento-oscuro);">Carga masiva desde CSV</h5>
+                            <a href="/api/calificaciones/plantilla/csv" class="btn btn-outline-acento btn-sm fw-semibold">
+                                Descargar plantilla de ejemplo
+                            </a>
+                        </div>
+                        <p class="text-muted-suave small">
+                            Columnas esperadas (32): <code>origen, mercado, periodo_comercial (YYYY-MM-DD), factor_1 ... factor_29</code>. Acepta coma o punto y coma.
+                        </p>
+                        <form id="csv-form" class="row g-3 align-items-center">
+                            <div class="col-md-8">
+                                <input type="file" id="csv-file" class="form-control" accept=".csv" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-acento w-100 fw-semibold">
+                                    Subir y procesar CSV
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 4: AUDITORÍA Y SEGURIDAD -->
+                <div class="tab-pane fade" id="tab-seguridad">
+                    <div class="card p-4 mb-4">
+                        <h5 class="fw-bold mb-2" style="color: var(--acento-oscuro);">Seguridad, roles y cumplimiento</h5>
+                        <p class="text-muted-suave small mb-2">
+                            El sistema opera como aplicación web con base de datos PostgreSQL, almacena contraseñas con hash SHA-256, aplica consultas parametrizadas y valida permisos por rol en el servidor (solo el administrador puede editar o eliminar).
+                        </p>
+                        <p class="text-muted-suave small mb-0">
+                            En el marco de la Ley 21.459 y buenas prácticas OWASP, toda operación relevante queda registrada en la bitácora inferior con usuario, rol, acción y fecha.
+                        </p>
+                    </div>
+
+                    <div class="card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0" style="color: var(--acento-oscuro);">Bitácora de auditoría</h5>
+                            <button class="btn btn-outline-acento btn-sm fw-semibold" onclick="cargarAuditoria()">
+                                Actualizar
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped align-middle">
+                                <thead style="background-color: var(--bg-suave);">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Fecha y hora</th>
+                                        <th>Usuario</th>
+                                        <th>Rol</th>
+                                        <th>Acción</th>
+                                        <th>Detalle</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-auditoria">
+                                    <tr><td colspan="6" class="text-center text-muted-suave py-3">Cargando bitácora...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN ANTES DE GUARDAR -->
+    <div class="modal fade" id="modalConfirmarGuardado" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom-color: var(--borde-suave);">
+                    <h5 class="modal-title fw-bold" style="color: var(--acento-oscuro);">Confirmar guardado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3" id="texto-confirmacion">¿Deseas guardar esta calificación tributaria?</p>
+                    <ul class="list-group list-group-flush small border rounded-3" style="border-color: var(--borde-suave) !important;">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted-suave">Origen:</span>
+                            <strong id="conf-origen"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted-suave">Mercado:</span>
+                            <strong id="conf-mercado"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted-suave">Período comercial:</span>
+                            <strong id="conf-fecha"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted-suave">Suma factores (8–16):</span>
+                            <strong id="conf-suma" class="font-monospace"></strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--borde-suave);">
+                    <button type="button" class="btn btn-outline-acento" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-acento fw-semibold" id="btn-confirmar-si">
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VER DETALLE 29 FACTORES -->
+    <div class="modal fade" id="modalDetalle" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom-color: var(--borde-suave);">
+                    <h5 class="modal-title fw-bold" id="modalDetalleTitulo" style="color: var(--acento-oscuro);">Detalle de calificación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3 p-2 rounded-3 mx-0" style="background-color: var(--bg-suave);" id="modalDetalleCabecera"></div>
+                    <div class="row g-2" id="modalDetalleFactores"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let usuarioActual = null;
+        let rolActual = null;
+        let payloadPendiente = null;
+        let modalConfirmacionInstance = null;
+
+        function getAuthHeaders(extra = {}) {
+            return {
+                ...extra,
+                "x-usuario": usuarioActual || "anonimo",
+                "x-rol": rolActual || "cliente"
+            };
+        }
+
+        function cambiarModoAuth(modo) {
+            const loginForm = document.getElementById("login-form");
+            const regForm = document.getElementById("register-form");
+            const btnLogin = document.getElementById("btn-modo-login");
+            const btnReg = document.getElementById("btn-modo-registro");
+
+            document.getElementById("auth-error").classList.add("d-none");
+            document.getElementById("auth-success").classList.add("d-none");
+
+            if (modo === "login") {
+                loginForm.classList.remove("d-none");
+                regForm.classList.add("d-none");
+                btnLogin.className = "btn btn-acento w-50 fw-semibold";
+                btnReg.className = "btn btn-outline-acento w-50 fw-semibold";
+            } else {
+                loginForm.classList.add("d-none");
+                regForm.classList.remove("d-none");
+                btnLogin.className = "btn btn-outline-acento w-50 fw-semibold";
+                btnReg.className = "btn btn-acento w-50 fw-semibold";
+            }
+        }
+
+        function irAFormularioAuth(modo) {
+            cambiarModoAuth(modo);
+            document.getElementById("caja-acceso").scrollIntoView({ behavior: "smooth" });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            modalConfirmacionInstance = new bootstrap.Modal(document.getElementById("modalConfirmarGuardado"));
+
+            const contenedor = document.getElementById("contenedor-factores");
+            for (let i = 1; i <= 29; i++) {
+                const esGrupoCritico = (i >= 8 && i <= 16);
+                const col = document.createElement("div");
+                col.className = "col-6 col-md-3 col-lg-2";
+                col.innerHTML = `
+                    <label class="form-label small mb-1 ${esGrupoCritico ? 'fw-bold' : 'text-muted-suave'}" style="${esGrupoCritico ? 'color: var(--acento-oscuro);' : ''}">
+                        Factor ${i} ${esGrupoCritico ? '*' : ''}
+                    </label>
+                    <input type="number" step="0.00000001" min="0" value="0.00000000" 
+                           class="form-control form-control-sm factor-input" id="factor-${i}" 
+                           oninput="calcularSumaCritica()" required>
+                `;
+                contenedor.appendChild(col);
+            }
+
+            document.getElementById("periodo_comercial").addEventListener("change", function() {
+                if (this.value) this.classList.remove("is-invalid");
+            });
+
+            const savedUser = localStorage.getItem("usuario");
+            const savedRol = localStorage.getItem("rol");
+            if (savedUser && savedRol) {
+                iniciarInterfaz(savedUser, savedRol);
+            }
+        });
+
+        document.getElementById("login-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById("login-user").value.trim();
+            const password = document.getElementById("login-pass").value.trim();
+            const errorBox = document.getElementById("auth-error");
+
+            try {
+                const res = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ usuario, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    errorBox.classList.add("d-none");
+                    localStorage.setItem("usuario", data.usuario);
+                    localStorage.setItem("rol", data.rol);
+                    iniciarInterfaz(data.usuario, data.rol);
+                } else {
+                    errorBox.textContent = data.detail || "Error de autenticación";
+                    errorBox.classList.remove("d-none");
+                }
+            } catch (err) {
+                errorBox.textContent = "Error de conexión con el servidor";
+                errorBox.classList.remove("d-none");
+            }
+        });
+
+        document.getElementById("register-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById("reg-user").value.trim();
+            const password = document.getElementById("reg-pass").value.trim();
+            const rol = document.getElementById("reg-rol").value;
+            const errorBox = document.getElementById("auth-error");
+            const successBox = document.getElementById("auth-success");
+
+            errorBox.classList.add("d-none");
+            successBox.classList.add("d-none");
+
+            try {
+                const res = await fetch("/api/registro", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ usuario, password, rol })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    document.getElementById("register-form").reset();
+                    document.getElementById("login-user").value = usuario;
+                    cambiarModoAuth("login");
+                    successBox.textContent = data.mensaje + " Ahora puedes iniciar sesión.";
+                    successBox.classList.remove("d-none");
+                } else {
+                    errorBox.textContent = data.detail || "No se pudo registrar el usuario";
+                    errorBox.classList.remove("d-none");
+                }
+            } catch (err) {
+                errorBox.textContent = "Error de conexión con el servidor";
+                errorBox.classList.remove("d-none");
+            }
+        });
+
+        function iniciarInterfaz(usuario, rol) {
+            usuarioActual = usuario;
+            rolActual = rol;
+            document.getElementById("nav-usuario").textContent = usuario;
+            document.getElementById("nav-rol").textContent = rol;
+
+            document.getElementById("login-section").classList.add("d-none");
+            document.getElementById("app-section").classList.remove("d-none");
+            cargarRegistros();
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem("usuario");
+            localStorage.removeItem("rol");
+            location.reload();
+        }
+
+        function calcularSumaCritica() {
+            let suma = 0;
+            for (let i = 8; i <= 16; i++) {
+                const val = parseFloat(document.getElementById(`factor-${i}`).value) || 0;
+                suma += val;
+            }
+            const badge = document.getElementById("badge-suma-8-16");
+            const box = document.getElementById("box-suma-8-16");
+            badge.textContent = `Suma (8-16): ${suma.toFixed(8)}`;
+
+            if (suma > 1.00000000) {
+                badge.className = "badge bg-danger fs-6 font-monospace px-3 py-2";
+                box.className = "alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 py-2 mb-3 rounded-3";
+            } else {
+                badge.className = "badge btn-acento fs-6 font-monospace px-3 py-2";
+                box.className = "alerta-regla d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 py-2 mb-3";
+            }
+            return suma;
+        }
+
+        function rellenarDatosPrueba() {
+            const inputFecha = document.getElementById("periodo_comercial");
+            inputFecha.value = "2026-11-23";
+            inputFecha.classList.remove("is-invalid");
+
+            for (let i = 1; i <= 29; i++) {
+                let valor = (i >= 8 && i <= 16) ? 0.08500000 : 0.02500000;
+                document.getElementById(`factor-${i}`).value = valor.toFixed(8);
+            }
+            calcularSumaCritica();
+        }
+
+        document.getElementById("calificacion-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const inputFecha = document.getElementById("periodo_comercial");
+            const fechaValor = inputFecha.value.trim();
+
+            if (!fechaValor) {
+                inputFecha.classList.add("is-invalid");
+                inputFecha.focus();
+                mostrarAlerta("Error: El período comercial (fecha) es obligatorio para guardar.", "danger");
+                return;
+            }
+            inputFecha.classList.remove("is-invalid");
+
+            const sumaCritica = calcularSumaCritica();
+            if (sumaCritica > 1.00000000) {
+                mostrarAlerta(`No se puede guardar: La suma de los factores 8 al 16 (${sumaCritica.toFixed(8)}) supera 1.00000000.`, "danger");
+                return;
+            }
+
+            const editId = document.getElementById("edit-id").value;
+            const factores = [];
+            for (let i = 1; i <= 29; i++) {
+                factores.push(parseFloat(document.getElementById(`factor-${i}`).value) || 0);
+            }
+
+            const origen = document.getElementById("origen").value;
+            const mercado = document.getElementById("mercado").value;
+
+            payloadPendiente = {
+                editId: editId,
+                data: {
+                    origen: origen,
+                    mercado: mercado,
+                    periodo_comercial: fechaValor,
+                    factores: factores
+                }
+            };
+
+            document.getElementById("texto-confirmacion").textContent = editId
+                ? `¿Confirmas actualizar la calificación #${editId}?`
+                : "¿Confirmas registrar esta nueva calificación tributaria?";
+            document.getElementById("conf-origen").textContent = origen;
+            document.getElementById("conf-mercado").textContent = mercado;
+            document.getElementById("conf-fecha").textContent = fechaValor;
+            document.getElementById("conf-suma").textContent = sumaCritica.toFixed(8);
+
+            modalConfirmacionInstance.show();
+        });
+
+        document.getElementById("btn-confirmar-si").addEventListener("click", async () => {
+            if (!payloadPendiente) return;
+
+            modalConfirmacionInstance.hide();
+            const { editId, data } = payloadPendiente;
+            const url = editId ? `/api/calificaciones/${editId}` : "/api/calificaciones";
+            const method = editId ? "PUT" : "POST";
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: getAuthHeaders({ "Content-Type": "application/json" }),
+                    body: JSON.stringify(data)
+                });
+                const respuesta = await res.json();
+
+                if (res.ok) {
+                    mostrarAlerta(respuesta.mensaje, "success");
+                    cancelarEdicion();
+                    cargarRegistros();
+                } else {
+                    mostrarAlerta(respuesta.detail || "Error al guardar", "danger");
+                }
+            } catch (err) {
+                mostrarAlerta("Error de red al intentar guardar", "danger");
+            } finally {
+                payloadPendiente = null;
+            }
+        });
+
+        async function cargarRegistros() {
+            const mercado = document.getElementById("filtro-mercado").value;
+            const tbody = document.getElementById("tabla-calificaciones");
+
+            try {
+                const res = await fetch(`/api/calificaciones?mercado=${encodeURIComponent(mercado)}`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger fw-bold py-3">${data.detail}</td></tr>`;
+                    return;
+                }
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted-suave py-4">No hay calificaciones registradas aún.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = "";
+                data.forEach(item => {
+                    const botonesAdmin = (rolActual === "admin") ? `
+                        <button class="btn btn-outline-warning btn-sm me-1" onclick="prepararEdicion(${item.id_calificacion})" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm" onclick="eliminarRegistro(${item.id_calificacion})" title="Eliminar">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    ` : "";
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td class="fw-bold">#${item.id_calificacion}</td>
+                        <td>${item.origen}</td>
+                        <td><span class="badge badge-rol">${item.mercado}</span></td>
+                        <td>${item.periodo_comercial}</td>
+                        <td>${item.usuario_registro}</td>
+                        <td class="small text-muted-suave">${item.fecha_creacion.split(".")[0]}</td>
+                        <td class="text-end">
+                            <button class="btn btn-outline-acento btn-sm me-1" onclick="verDetalle(${item.id_calificacion})" title="Ver 29 factores">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            ${botonesAdmin}
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-3">Error al conectar con el servidor</td></tr>`;
+            }
+        }
+
+        async function verDetalle(id) {
+            const res = await fetch(`/api/calificaciones/${id}`);
+            const data = await res.json();
+            if (!res.ok) return mostrarAlerta(data.detail, "danger");
+
+            document.getElementById("modalDetalleTitulo").textContent = `Detalle calificación #${data.cabecera.id_calificacion}`;
+            document.getElementById("modalDetalleCabecera").innerHTML = `
+                <div class="col-4"><strong>Origen:</strong> ${data.cabecera.origen}</div>
+                <div class="col-4"><strong>Mercado:</strong> ${data.cabecera.mercado}</div>
+                <div class="col-4"><strong>Período:</strong> ${data.cabecera.periodo_comercial}</div>
+            `;
+
+            const grid = document.getElementById("modalDetalleFactores");
+            grid.innerHTML = "";
+            data.factores.forEach(f => {
+                grid.innerHTML += `
+                    <div class="col-6 col-md-3">
+                        <div class="border rounded-3 p-2 bg-white" style="border-color: var(--borde-suave) !important;">
+                            <small class="text-muted-suave d-block">Factor ${f.numero_factor}</small>
+                            <strong class="font-monospace small">${Number(f.valor_calculado).toFixed(8)}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+
+            new bootstrap.Modal(document.getElementById("modalDetalle")).show();
+        }
+
+        async function prepararEdicion(id) {
+            const res = await fetch(`/api/calificaciones/${id}`);
+            const data = await res.json();
+            if (!res.ok) return mostrarAlerta(data.detail, "danger");
+
+            document.getElementById("edit-id").value = id;
+            document.getElementById("origen").value = data.cabecera.origen;
+            document.getElementById("mercado").value = data.cabecera.mercado;
+            document.getElementById("periodo_comercial").value = data.cabecera.periodo_comercial;
+            document.getElementById("periodo_comercial").classList.remove("is-invalid");
+
+            data.factores.forEach(f => {
+                document.getElementById(`factor-${f.numero_factor}`).value = Number(f.valor_calculado).toFixed(8);
+            });
+            calcularSumaCritica();
+
+            document.getElementById("form-titulo").textContent = `Editando calificación #${id}`;
+            document.getElementById("btn-guardar").innerHTML = `Actualizar registro`;
+            document.getElementById("btn-cancelar-edicion").classList.remove("d-none");
+
+            bootstrap.Tab.getOrCreateInstance(document.getElementById("form-tab")).show();
+        }
+
+        function cancelarEdicion() {
+            document.getElementById("edit-id").value = "";
+            document.getElementById("calificacion-form").reset();
+            document.getElementById("periodo_comercial").classList.remove("is-invalid");
+            for (let i = 1; i <= 29; i++) {
+                document.getElementById(`factor-${i}`).value = "0.00000000";
+            }
+            calcularSumaCritica();
+            document.getElementById("form-titulo").textContent = "Ingresar calificación tributaria";
+            document.getElementById("btn-guardar").innerHTML = `Calcular y guardar`;
+            document.getElementById("btn-cancelar-edicion").classList.add("d-none");
+        }
+
+        async function eliminarRegistro(id) {
+            if (!confirm(`¿Seguro que deseas eliminar la calificación #${id}?`)) return;
+            const res = await fetch(`/api/calificaciones/${id}`, {
+                method: "DELETE",
+                headers: getAuthHeaders()
+            });
+            const data = await res.json();
+            if (res.ok) {
+                mostrarAlerta(data.mensaje, "success");
+                cargarRegistros();
+            } else {
+                mostrarAlerta(data.detail, "danger");
+            }
+        }
+
+        document.getElementById("csv-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById("csv-file");
+            if (!fileInput.files.length) return;
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const res = await fetch("/api/calificaciones/cargar-csv", {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: formData
+            });
+            const data = await res.json();
+            if (res.ok) {
+                mostrarAlerta(data.mensaje, "success");
+                fileInput.value = "";
+                cargarRegistros();
+            } else {
+                mostrarAlerta(data.detail, "danger");
+            }
+        });
+
+        async function cargarAuditoria() {
+            const tbody = document.getElementById("tabla-auditoria");
+            try {
+                const res = await fetch("/api/auditoria");
+                const logs = await res.json();
+                if (!logs.length) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted-suave py-3">Sin eventos registrados aún.</td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = "";
+                logs.forEach(l => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${l.id_log}</td>
+                            <td class="small">${l.fecha_hora}</td>
+                            <td class="fw-bold">${l.usuario}</td>
+                            <td><span class="badge badge-rol">${l.rol}</span></td>
+                            <td><code>${l.accion}</code></td>
+                            <td class="small">${l.detalle}</td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error cargando auditoría</td></tr>`;
+            }
+        }
+
+        function mostrarAlerta(msg, tipo) {
+            const alertBox = document.getElementById("global-alert");
+            alertBox.className = `alert alert-${tipo} alert-dismissible fade show rounded-3`;
+            document.getElementById("global-alert-msg").textContent = msg;
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function ocultarAlerta() {
+            document.getElementById("global-alert").classList.add("d-none");
+        }
+    </script>
+</body>
+</html>
